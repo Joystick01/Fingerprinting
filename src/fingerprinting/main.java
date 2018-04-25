@@ -117,6 +117,12 @@ public class main extends javax.swing.JFrame {
 
         jLabel3.setText("Präzision");
 
+        jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinner1StateChanged(evt);
+            }
+        });
+
         jLabel4.setText("Anzahl");
 
         jLabel5.setText("Basis");
@@ -226,8 +232,20 @@ public class main extends javax.swing.JFrame {
     private void jTextArea1CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextArea1CaretUpdate
         Text = jTextArea1.getText();
         Zeichen = Text.getBytes();
-        jLabel1.setText("Text ("+String.valueOf(Zeichen.length)+") Zeichen");
+        jLabel1.setText("Text ("+String.valueOf(Zeichen.length)+") Zeichen");        
+        /**
+        jProgressBar1.setValue();
+        jComboBox1.setModel(cbm);
+        **/
     }//GEN-LAST:event_jTextArea1CaretUpdate
+
+    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+        /**
+        jTable1.setModel(tm);
+        jTable2.setModel(tm);
+        jProgressBar1.setValue();
+        **/
+    }//GEN-LAST:event_jSpinner1StateChanged
 
     /**
      * @param args the command line arguments
