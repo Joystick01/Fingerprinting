@@ -12,11 +12,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.text.Text;
+import javax.swing.ComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -25,6 +28,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class main extends javax.swing.JFrame {
     byte[] Zeichen;
     String Text;
+    List<String> Prim = new ArrayList<>();
+    
     /**
      * Creates new form main
      */
@@ -56,6 +61,7 @@ public class main extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,11 +69,6 @@ public class main extends javax.swing.JFrame {
 
         jTextArea1.setTabSize(4);
         jTextArea1.setBorder(null);
-        jTextArea1.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                jTextArea1CaretUpdate(evt);
-            }
-        });
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel1.setText("Text (0) Zeichen");
@@ -83,7 +84,7 @@ public class main extends javax.swing.JFrame {
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null}
+
             },
             new String [] {
                 "R", "Fingerprint"
@@ -105,6 +106,7 @@ public class main extends javax.swing.JFrame {
             }
         });
         jTable2.setColumnSelectionAllowed(true);
+        jTable2.setEnabled(false);
         jTable2.setFillsViewportHeight(true);
         jScrollPane3.setViewportView(jTable2);
         jTable2.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -117,6 +119,8 @@ public class main extends javax.swing.JFrame {
 
         jLabel3.setText("Präzision");
 
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 255, 1));
+        jSpinner1.setEnabled(false);
         jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinner1StateChanged(evt);
@@ -127,11 +131,11 @@ public class main extends javax.swing.JFrame {
 
         jLabel5.setText("Basis");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setEnabled(false);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null}
+
             },
             new String [] {
                 "Modifikatoren"
@@ -145,11 +149,20 @@ public class main extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        jTable1.setEnabled(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane4.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
         }
+
+        jButton2.setText("Text Fertig");
+        jButton2.setToolTipText("");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -159,16 +172,13 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -176,9 +186,16 @@ public class main extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -189,7 +206,9 @@ public class main extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -212,7 +231,16 @@ public class main extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    static int fingerprint(byte[] text, int basis, int mod){ 
+        
+        int fp = (text[0]*mod)%basis;
+        for (int i = 1; i < text.length; i++) {
+            fp = ((fp+text[i])*mod)%basis;
+        }
+        return fp; 
+    } 
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //  FileChooser erstellen und Parametrisieren
         final JFileChooser fc = new JFileChooser();
@@ -229,23 +257,56 @@ public class main extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextArea1CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextArea1CaretUpdate
+    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+        DefaultTableModel tm1 = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel tm2 = (DefaultTableModel) jTable2.getModel();
+        tm1.setRowCount(0);
+        tm2.setRowCount(0);
+        
+        for (int i = 0; i < (int) jSpinner1.getValue(); i++) {
+            int rand = (int) (Math.random()*Text.length());
+            tm1.addRow(new Object[]{rand});
+            tm2.addRow(new Object[]{rand, fingerprint(Zeichen, Integer.parseInt(jComboBox1.getSelectedItem().toString()), rand)});
+        }
+        
+        jTable1.setModel(tm1);
+        jTable2.setModel(tm2);
+        //jProgressBar1.setValue();
+        
+    }//GEN-LAST:event_jSpinner1StateChanged
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        jSpinner1.setEnabled(true);
+        jComboBox1.setEnabled(true);
+        jProgressBar1.setEnabled(true);
+        jTable1.setEnabled(true);
+        jTable2.setEnabled(true);
+        
+        jComboBox1.removeAllItems();
         Text = jTextArea1.getText();
         Zeichen = Text.getBytes();
-        jLabel1.setText("Text ("+String.valueOf(Zeichen.length)+") Zeichen");        
-        /**
-        jProgressBar1.setValue();
-        jComboBox1.setModel(cbm);
-        **/
-    }//GEN-LAST:event_jTextArea1CaretUpdate
-
-    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        /**
-        jTable1.setModel(tm);
-        jTable2.setModel(tm);
-        jProgressBar1.setValue();
-        **/
-    }//GEN-LAST:event_jSpinner1StateChanged
+        jLabel1.setText("Text ("+String.valueOf(Zeichen.length)+") Zeichen");
+        //Primzahlgeneration
+        int n = (Text.length()*15), count, c = 0;
+        //nimm zahl
+        for (int i = (Text.length()); i <= n; i++) {
+            count = 2;
+            //teste teiler
+            for (int j = 2; j < i; j++) {
+                if (i % j == 0)
+                    count++;
+            }
+            if (count == 2) {
+                if (i>255) {
+                    jComboBox1.addItem(String.valueOf(i));
+                }
+                
+                c++;
+            }
+        }
+        jComboBox1.setSelectedIndex(jComboBox1.getItemCount()/2);
+        System.out.println(fingerprint(Zeichen, 54, 53));
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -284,6 +345,7 @@ public class main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
